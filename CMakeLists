@@ -1,0 +1,65 @@
+# Встановіть мінімально необхідну версію CMake
+cmake_minimum_required(VERSION 3.16)
+
+# Назва проєкту
+project(YourProjectName)
+
+# Встановіть стандарт C++
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# Вкажіть джерела та заголовки
+set(HEADERS
+    all_component.h
+    mainwindow.h
+    motherboard.h
+    os.h
+    proccersoer.h
+    ram.h
+)
+
+set(SOURCES
+    all_component.cpp
+    main.cpp
+    mainwindow.cpp
+    motherboard.cpp
+    os.cpp
+    proccersoer.cpp
+    ram.cpp
+)
+
+# Форми (UI файли)
+set(FORMS
+    mainwindow.ui
+)
+
+# Пошук необхідних компонентів Qt
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets)
+
+# Генерація файлів для форм
+qt6_wrap_ui(UI_HEADERS ${FORMS})
+
+# Додайте виконавчий файл
+add_executable(${PROJECT_NAME}
+    ${SOURCES}
+    ${HEADERS}
+    ${UI_HEADERS}
+)
+
+# Додайте бібліотеки Qt
+target_link_libraries(${PROJECT_NAME} PRIVATE Qt6::Core Qt6::Gui Qt6::Widgets)
+
+# Шляхи до заголовків
+include_directories(D:/qt/6.8.1/msvc2022_64/lib)
+
+# Додаткові бібліотеки
+link_directories(D:/qt/6.8.1/msvc2022_64/lib)
+
+# Шлях для встановлення
+if(UNIX AND NOT ANDROID)
+    set(target_path /opt/${PROJECT_NAME}/bin)
+else()
+    set(target_path /tmp/${PROJECT_NAME}/bin)
+endif()
+
+install(TARGETS ${PROJECT_NAME} DESTINATION ${target_path})
